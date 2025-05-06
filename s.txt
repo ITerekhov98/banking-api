@@ -1,0 +1,52 @@
+banking-api/
+├── cmd/
+│   └── server/               # Точка входа (main.go)
+│       └── main.go
+├── configs/                  # Конфигурационные файлы (например, .env, конфиг YAML)
+│   └── config.yaml
+├── internal/
+│   ├── app/                  # Инициализация зависимостей (DI, маршруты, middleware)
+│   │   └── app.go
+│   ├── handler/              # HTTP Handlers (REST endpoints)
+│   │   ├── auth_handler.go
+│   │   ├── account_handler.go
+│   │   ├── card_handler.go
+│   │   └── credit_handler.go
+│   ├── middleware/           # Middleware для JWT, логов, CORS
+│   │   ├── auth.go
+│   │   └── logger.go
+│   ├── model/                # Структуры, DTO, JSON теги
+│   │   ├── user.go
+│   │   ├── account.go
+│   │   ├── card.go
+│   │   ├── credit.go
+│   │   └── transaction.go
+│   ├── repository/           # SQL-запросы и работа с БД
+│   │   ├── user_repo.go
+│   │   ├── account_repo.go
+│   │   ├── card_repo.go
+│   │   └── credit_repo.go
+│   ├── service/              # Бизнес-логика
+│   │   ├── auth_service.go
+│   │   ├── account_service.go
+│   │   ├── card_service.go
+│   │   ├── credit_service.go
+│   │   └── analytics_service.go
+│   ├── integration/          # Внешние сервисы (ЦБ, SMTP)
+│   │   ├── cbr_client.go
+│   │   └── email_client.go
+│   ├── scheduler/            # Периодические задачи (списание кредитов)
+│   │   └── scheduler.go
+│   └── security/             # Шифрование, хеширование, подписи
+│       ├── bcrypt.go
+│       ├── pgp.go
+│       └── hmac.go
+├── migrations/               # SQL-миграции для базы данных
+│   └── 001_init_schema.sql
+├── pkg/                      # Общие вспомогательные пакеты (логирование, utils)
+│   ├── logger/               # Обёртка для logrus
+│   │   └── logger.go
+│   └── utils/
+│       └── luhn.go           # Алгоритм Луна для номеров карт
+├── go.mod
+└── go.sum

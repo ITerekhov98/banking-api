@@ -1,0 +1,45 @@
+# binary
+*.exe
+*.out
+*.test
+*.bin
+
+# Go build cache
+bin/
+build/
+dist/
+*.so
+*.dll
+*.dylib
+
+# Go modules
+vendor/
+
+# IDE/Editor configs
+.idea/
+.vscode/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs and temp
+*.log
+*.tmp
+*.bak
+
+# Env and keys
+.env
+.env.*
+*.key
+*.pem
+*.asc
+
+# binary migrations
+migrations/*.db
+migrations/*.lock
+
+# profiles and debug
+*.prof
+coverage.*

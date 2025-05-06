@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS accounts (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    balance NUMERIC(20, 2) DEFAULT 0 CHECK (balance >= 0)
+);
