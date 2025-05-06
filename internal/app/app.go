@@ -51,6 +51,9 @@ func SetupRouter() *mux.Router {
 	api.HandleFunc("/analytics", analyticsHandler.GetMonthlyStats).Methods("GET")
 	api.HandleFunc("/analytics/predict", analyticsHandler.GetPredictedBalance).Methods("GET")
 
+	keyRateHandler := handler.NewKeyRateHandler()
+	api.HandleFunc("/keyrate", keyRateHandler.GetKeyRate).Methods("GET")
+
 	logger.Info("Router initialized")
 
 	return router

@@ -49,6 +49,7 @@ func (h *AnalyticsHandler) GetPredictedBalance(w http.ResponseWriter, r *http.Re
 		return
 	}
 
+	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]float64{
 		"predicted_balance": pred,
 	})
