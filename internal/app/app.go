@@ -28,7 +28,10 @@ func SetupRouter() *mux.Router {
 	accountHandler := handler.NewAccountHandler(accountService)
 
 	api.HandleFunc("/accounts", accountHandler.CreateAccount).Methods("POST")
+	api.HandleFunc("/accounts/{id:[0-9]+}", accountHandler.Get).Methods("GET")
 	api.HandleFunc("/transfer", accountHandler.Transfer).Methods("POST")
+	api.HandleFunc("/deposit", accountHandler.Deposit).Methods("POST")
+	api.HandleFunc("/withdraw", accountHandler.Withdraw).Methods("POST")
 
 	cardRepo := &repository.CardRepository{}
 	cardService := service.NewCardervice(cardRepo, accountRepo)

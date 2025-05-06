@@ -37,3 +37,36 @@ func (s *AccountService) Transfer(ctx context.Context, fromUserID, fromAccountID
 
 	return s.accountRepo.TransferTx(ctx, fromAccountID, toAccountID, amount)
 }
+
+func (s *AccountService) Deposit(ctx context.Context, userID, accountID int64, amount float64) (*model.Account, error) {
+	ownerID, err := s.accountRepo.GetOwnerID(ctx, accountID)
+	if err != nil {
+		return nil, fmt.Errorf("account not found")
+	}
+	if ownerID != userID {
+		return nil, errors.New("access denied")
+	}
+	return s.accountRepo.Deposit(ctx, amount, accountID)
+}
+
+func (s *AccountService) Withdraw(ctx context.Context, userID, accountID int64, amount float64) (*model.Account, error) {
+	ownerID, err := s.accountRepo.GetOwnerID(ctx, accountID)
+	if err != nil {
+		return nil, fmt.Errorf("account not found")
+	}
+	if ownerID != userID {
+		return nil, errors.New("access denied")
+	}
+	return s.accountRepo.Withdraw(ctx, amount, accountID)
+}
+
+func (s *AccountService) Get(ctx context.Context, userID, accountID int64) (*model.Account, error) {
+	ownerID, err := s.accountRepo.GetOwnerID(ctx, accountID)
+	if err != nil {
+		return nil, fmt.Errorf("account not found")
+	}
+	if ownerID != userID {
+		return nil, errors.New("access denied")
+	}
+	return s.accountRepo.Get(ctx, accountID, userID)
+}
