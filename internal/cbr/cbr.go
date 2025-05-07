@@ -1,6 +1,7 @@
 package cbr
 
 import (
+	"banking-api/pkg/logger"
 	"bytes"
 	"encoding/xml"
 	"fmt"
@@ -30,6 +31,7 @@ func buildKeyRateSOAPBody(targetDate time.Time) []byte {
 }
 
 func GetKeyRate() (float64, error) {
+	logger.Info("Sending request to CBR...")
 	req, err := http.NewRequest("POST", keyRateSOAPURL, bytes.NewReader(buildKeyRateSOAPBody(time.Now())))
 	if err != nil {
 		return 0, err
@@ -41,6 +43,7 @@ func GetKeyRate() (float64, error) {
 	client := http.Client{Timeout: 10 * time.Second}
 	resp, err := client.Do(req)
 	if err != nil {
+		logger.Error("CBR request failed", err)
 		return 0, err
 	}
 	defer resp.Body.Close()

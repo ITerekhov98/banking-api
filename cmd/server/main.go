@@ -12,6 +12,7 @@ import (
 	_ "banking-api/docs"
 	"banking-api/internal/app"
 	"banking-api/internal/db"
+	"banking-api/internal/migration"
 	"banking-api/internal/repository"
 	scheduler "banking-api/internal/schedluer"
 	"banking-api/pkg/logger"
@@ -46,7 +47,12 @@ func main() {
 
 	// run application
 	router := app.SetupRouter()
-	router.PathPrefix("/swagger/").Handler(httpSwagger.WrapHandler)
+	if app.IsDebug() {
+		if err := migration.RunMigrations(); err != nil {
+			logger.Fatal("Migration failed: ", err)
+		}
+		router.PathPrefix("/swagger/").Handler(httpSwagger.WrapHandler)
+	}
 
 	port := os.Getenv("PORT")
 	if port == "" {
