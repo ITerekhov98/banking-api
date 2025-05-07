@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"banking-api/internal/handler/dto"
 	"banking-api/internal/middleware"
 	"banking-api/internal/service"
 )
@@ -40,13 +41,6 @@ func (h *AnalyticsHandler) GetMonthlyStats(w http.ResponseWriter, r *http.Reques
 	json.NewEncoder(w).Encode(stats)
 }
 
-// swagger:model predictedBalanceResponse
-type predictedBalanceResponse struct {
-	// Predicted account balance
-	// example: 123456.78
-	PredictedBalance float64 `json:"predicted_balance"`
-}
-
 // GetPredictedBalance godoc
 // @Summary     Predict account balance
 // @Description Returns projected account balance based on upcoming credit payments
@@ -76,7 +70,7 @@ func (h *AnalyticsHandler) GetPredictedBalance(w http.ResponseWriter, r *http.Re
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	response := predictedBalanceResponse{PredictedBalance: pred}
+	response := dto.PredictedBalanceResponse{PredictedBalance: pred}
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(response)
 }

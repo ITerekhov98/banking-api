@@ -5,20 +5,13 @@ import (
 	"net/http"
 
 	"banking-api/internal/cbr"
+	"banking-api/internal/handler/dto"
 )
 
 type KeyRateHandler struct{}
 
 func NewKeyRateHandler() *KeyRateHandler {
 	return &KeyRateHandler{}
-}
-
-// KeyRateResponse contain current key rate
-// swagger:model KeyRateResponse
-type KeyRateResponse struct {
-	// Current key rate
-	// example: 21
-	KeyRate float64 `json:"key_rate"`
 }
 
 // GetKeyRate godoc
@@ -37,7 +30,7 @@ func (h *KeyRateHandler) GetKeyRate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	resp := KeyRateResponse{KeyRate: rate}
+	resp := dto.KeyRateResponse{KeyRate: rate}
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(resp)
 }

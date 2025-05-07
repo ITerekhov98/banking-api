@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"banking-api/internal/handler/dto"
 	"banking-api/internal/middleware"
 	"banking-api/internal/service"
 	"encoding/json"
@@ -13,14 +14,6 @@ type CardHandler struct {
 
 func NewCardHandler(cardService *service.CardService) *CardHandler {
 	return &CardHandler{cardService: cardService}
-}
-
-// createCardRequest represents a card creation request
-// swagger:model createCardRequest
-type createCardRequest struct {
-	// ID of the account to associate the credit with
-	// example: 42
-	AccountID int64 `json:"account_id"`
 }
 
 // CreateCard godoc
@@ -38,7 +31,7 @@ type createCardRequest struct {
 func (h *CardHandler) CreateCard(w http.ResponseWriter, r *http.Request) {
 	userID := r.Context().Value(middleware.UserIDKey).(int64)
 
-	var req createCardRequest
+	var req dto.CreateCardRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, "invalid request", http.StatusBadRequest)
 		return

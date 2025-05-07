@@ -7,6 +7,7 @@ import (
 
 	"github.com/gorilla/mux"
 
+	"banking-api/internal/handler/dto"
 	"banking-api/internal/middleware"
 	"banking-api/internal/service"
 )
@@ -17,23 +18,6 @@ type CreditHandler struct {
 
 func NewCreditHandler(creditService *service.CreditService) *CreditHandler {
 	return &CreditHandler{creditService: creditService}
-}
-
-// createCreditRequest represents a credit creation request
-// swagger:model createCreditRequest
-type createCreditRequest struct {
-	// ID of the account to associate the credit with
-	// example: 42
-	AccountID int64 `json:"account_id"`
-	// Principal credit amount
-	// example: 100000.00
-	Principal float64 `json:"principal"`
-	// Annual interest rate in percent
-	// example: 12.5
-	InterestRate float64 `json:"interest_rate"`
-	// Term of the credit in months
-	// example: 12
-	TermMonths int `json:"term_months"`
 }
 
 // CreateCredit godoc
@@ -51,7 +35,7 @@ type createCreditRequest struct {
 func (h *CreditHandler) CreateCredit(w http.ResponseWriter, r *http.Request) {
 	userID := r.Context().Value(middleware.UserIDKey).(int64)
 
-	var req createCreditRequest
+	var req dto.CreateCreditRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, "invalid request", http.StatusBadRequest)
 		return

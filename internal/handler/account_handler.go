@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"banking-api/internal/handler/dto"
 	"banking-api/internal/middleware"
 	"banking-api/internal/service"
 
@@ -43,20 +44,6 @@ func (h *AccountHandler) CreateAccount(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(account)
 }
 
-// Payload to make funds transfer
-// swagger:model depositRequest
-type transferRequest struct {
-	// ID of sender account
-	// example: 42
-	FromAccountID int64 `json:"from_account_id"`
-	// ID of the recipient account
-	// example: 24
-	ToAccountID int64 `json:"to_account_id"`
-	// Amount of funds
-	// example: 1000.1
-	Amount float64 `json:"amount"`
-}
-
 // Transfer godoc
 // @Summary     Transfer funds between accounts
 // @Description Transfers money from one user-owned account to another account
@@ -73,7 +60,7 @@ type transferRequest struct {
 func (h *AccountHandler) Transfer(w http.ResponseWriter, r *http.Request) {
 	userID := r.Context().Value(middleware.UserIDKey).(int64)
 
-	var req transferRequest
+	var req dto.TransferRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, "invalid request", http.StatusBadRequest)
 		return
@@ -87,17 +74,6 @@ func (h *AccountHandler) Transfer(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(`{"status":"ok"}`))
-}
-
-// Payload to make transactions with account - deposit or withdrawal
-// swagger:model depositRequest
-type depositRequest struct {
-	// ID of the target account
-	// example: 42
-	AccountID int64 `json:"account_id"`
-	// Amount of funds
-	// example: 1000.1
-	Amount float64 `json:"amount"`
 }
 
 // Deposit godoc
@@ -115,7 +91,7 @@ type depositRequest struct {
 func (h *AccountHandler) Deposit(w http.ResponseWriter, r *http.Request) {
 	userID := r.Context().Value(middleware.UserIDKey).(int64)
 
-	var req depositRequest
+	var req dto.DepositRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, "invalid request", http.StatusBadRequest)
 		return
@@ -178,7 +154,7 @@ func (h *AccountHandler) Get(w http.ResponseWriter, r *http.Request) {
 func (h *AccountHandler) Withdraw(w http.ResponseWriter, r *http.Request) {
 	userID := r.Context().Value(middleware.UserIDKey).(int64)
 
-	var req depositRequest
+	var req dto.DepositRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, "invalid request", http.StatusBadRequest)
 		return
