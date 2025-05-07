@@ -13,12 +13,15 @@ import (
 func SetupRouter() *mux.Router {
 	router := mux.NewRouter()
 
+	// for swagger doc
+	router.Use(middleware.CORS("http://localhost:8080", "http://127.0.0.1:8080"))
+
 	userRepo := &repository.UserRepository{}
 	authService := service.NewAuthService(userRepo)
 	authHandler := handler.NewAuthHandler(authService)
 
-	router.HandleFunc("/register", authHandler.Register).Methods("POST")
-	router.HandleFunc("/login", authHandler.Login).Methods("POST")
+	router.HandleFunc("/register", authHandler.Register).Methods("POST", "OPTIONS")
+	router.HandleFunc("/login", authHandler.Login).Methods("POST", "OPTIONS")
 
 	api := router.PathPrefix("/api").Subrouter()
 	api.Use(middleware.AuthMiddleware)

@@ -19,13 +19,35 @@ func NewCreditHandler(creditService *service.CreditService) *CreditHandler {
 	return &CreditHandler{creditService: creditService}
 }
 
+// createCreditRequest represents a credit creation request
+// swagger:model createCreditRequest
 type createCreditRequest struct {
-	AccountID    int64   `json:"account_id"`
-	Principal    float64 `json:"principal"`
+	// ID of the account to associate the credit with
+	// example: 42
+	AccountID int64 `json:"account_id"`
+	// Principal credit amount
+	// example: 100000.00
+	Principal float64 `json:"principal"`
+	// Annual interest rate in percent
+	// example: 12.5
 	InterestRate float64 `json:"interest_rate"`
-	TermMonths   int     `json:"term_months"`
+	// Term of the credit in months
+	// example: 12
+	TermMonths int `json:"term_months"`
 }
 
+// CreateCredit godoc
+// @Summary     Create a new credit
+// @Description Issues a new credit for the user with annuity payment schedule
+// @Tags        Credits
+// @Accept      json
+// @Produce     json
+// @Param       createCreditRequest body createCreditRequest true "Credit details"
+// @Success     201 {object} model.Credit
+// @Failure     400 {string} string
+// @Failure     401 {string} string
+// @Router      /api/credits [post]
+// @Security    BearerAuth
 func (h *CreditHandler) CreateCredit(w http.ResponseWriter, r *http.Request) {
 	userID := r.Context().Value(middleware.UserIDKey).(int64)
 
@@ -45,6 +67,17 @@ func (h *CreditHandler) CreateCredit(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(credit)
 }
 
+// GetSchedule godoc
+// @Summary     Get credit payment schedule
+// @Description Returns a full monthly payment schedule for a specific credit
+// @Tags        Credits
+// @Produce     json
+// @Param       id path int true "Credit ID"
+// @Success     200 {array} model.PaymentSchedule
+// @Failure     400 {string} string
+// @Failure     401 {string} string
+// @Router      /api/credits/{id}/schedule [get]
+// @Security    BearerAuth
 func (h *CreditHandler) GetSchedule(w http.ResponseWriter, r *http.Request) {
 	userID := r.Context().Value(middleware.UserIDKey).(int64)
 

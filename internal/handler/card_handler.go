@@ -15,10 +15,26 @@ func NewCardHandler(cardService *service.CardService) *CardHandler {
 	return &CardHandler{cardService: cardService}
 }
 
+// createCardRequest represents a card creation request
+// swagger:model createCardRequest
 type createCardRequest struct {
+	// ID of the account to associate the credit with
+	// example: 42
 	AccountID int64 `json:"account_id"`
 }
 
+// CreateCard godoc
+// @Summary     Issue a new virtual card
+// @Description Generates a new encrypted virtual card for the specified account
+// @Tags        Cards
+// @Accept      json
+// @Produce     json
+// @Param       createCardRequest body createCardRequest true "Target account ID"
+// @Success     201 {object} model.CardPlain
+// @Failure     400 {string} string
+// @Failure     401 {string} string
+// @Router      /api/cards [post]
+// @Security    BearerAuth
 func (h *CardHandler) CreateCard(w http.ResponseWriter, r *http.Request) {
 	userID := r.Context().Value(middleware.UserIDKey).(int64)
 
@@ -38,6 +54,16 @@ func (h *CardHandler) CreateCard(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(card)
 }
 
+// GetUserCards godoc
+// @Summary     Get user's virtual cards
+// @Description Returns decrypted virtual card data (number, expiry) for the authenticated user
+// @Tags        Cards
+// @Produce     json
+// @Success     200 {array} model.CardRaw
+// @Failure     401 {string} string
+// @Failure     500 {string} string
+// @Router      /api/cards [get]
+// @Security    BearerAuth
 func (h *CardHandler) GetUserCards(w http.ResponseWriter, r *http.Request) {
 	userID := r.Context().Value(middleware.UserIDKey).(int64)
 

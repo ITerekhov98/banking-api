@@ -1,0 +1,708 @@
+basePath: /
+definitions:
+  handler.KeyRateResponse:
+    properties:
+      key_rate:
+        description: |-
+          Current key rate
+          example: 21
+        type: number
+    type: object
+  handler.LoginRequest:
+    properties:
+      email:
+        description: |-
+          Unique user email
+          example: example@gmail.com
+        type: string
+      password:
+        description: |-
+          Password
+          example: P_ass11worD
+        type: string
+    type: object
+  handler.LoginResponse:
+    properties:
+      token:
+        type: string
+    type: object
+  handler.RegisterResponse:
+    properties:
+      email:
+        description: |-
+          Unique user email
+          example: example@gmail.com
+        type: string
+      id:
+        description: |-
+          ID of created user
+          example: 1
+        type: integer
+      username:
+        description: |-
+          Username
+          example: user_name
+        type: string
+    type: object
+  handler.createCardRequest:
+    properties:
+      account_id:
+        description: |-
+          ID of the account to associate the credit with
+          example: 42
+        type: integer
+    type: object
+  handler.createCreditRequest:
+    properties:
+      account_id:
+        description: |-
+          ID of the account to associate the credit with
+          example: 42
+        type: integer
+      interest_rate:
+        description: |-
+          Annual interest rate in percent
+          example: 12.5
+        type: number
+      principal:
+        description: |-
+          Principal credit amount
+          example: 100000.00
+        type: number
+      term_months:
+        description: |-
+          Term of the credit in months
+          example: 12
+        type: integer
+    type: object
+  handler.depositRequest:
+    properties:
+      account_id:
+        description: |-
+          ID of the target account
+          example: 42
+        type: integer
+      amount:
+        description: |-
+          Amount of funds
+          example: 1000.1
+        type: number
+    type: object
+  handler.predictedBalanceResponse:
+    properties:
+      predicted_balance:
+        description: |-
+          Predicted account balance
+          example: 123456.78
+        type: number
+    type: object
+  handler.registerRequest:
+    properties:
+      email:
+        description: |-
+          Unique user email
+          example: example@gmail.com
+        type: string
+      password:
+        description: |-
+          Password
+          example: P_ass11worD
+        type: string
+      username:
+        description: |-
+          Unique user name
+          example: user_name
+        type: string
+    type: object
+  handler.transferRequest:
+    properties:
+      amount:
+        description: |-
+          Amount of funds
+          example: 1000.1
+        type: number
+      from_account_id:
+        description: |-
+          ID of sender account
+          example: 42
+        type: integer
+      to_account_id:
+        description: |-
+          ID of the recipient account
+          example: 24
+        type: integer
+    type: object
+  model.Account:
+    properties:
+      balance:
+        description: |-
+          Current account balance
+          example: 1000
+        type: number
+      id:
+        description: |-
+          Unique ID of the account
+          example: 102
+        type: integer
+      user_id:
+        description: |-
+          Unique userID of the account
+          example: 102
+        type: integer
+    type: object
+  model.CardPlain:
+    properties:
+      account_id:
+        description: |-
+          Account ID this card is linked to
+          example: 42
+        type: integer
+      cvv:
+        description: |-
+          CVV code (shown only once after creation)
+          example: 319
+        type: string
+      expiry:
+        description: |-
+          Expiry date in MM/YY format
+          example: 12/28
+        type: string
+      id:
+        description: |-
+          Unique ID of the card
+          example: 102
+        type: integer
+      number:
+        description: |-
+          Plaintext card number (shown once)
+          example: 4276123456789012
+        type: string
+    type: object
+  model.CardRaw:
+    properties:
+      account_id:
+        description: |-
+          Account ID this card is linked to
+          example: 42
+        type: integer
+      expiry:
+        description: |-
+          Encrypted expiry date
+          example: 12/28
+        type: string
+      hmac:
+        description: |-
+          HMAC signature of the card
+          example: d41d8cd98f00b204e9800998ecf8427e
+        type: string
+      id:
+        description: |-
+          Unique ID of the card
+          example: 101
+        type: integer
+      number:
+        description: |-
+          Encrypted card number
+          example: 4276123456789012
+        type: string
+    type: object
+  model.Credit:
+    properties:
+      account_id:
+        description: |-
+          ID of the associated account
+          example: 42
+        type: integer
+      created_at:
+        description: |-
+          Date the credit was issued
+          example: 2025-05-01T00:00:00Z
+        type: string
+      id:
+        description: |-
+          ID of the credit
+          example: 101
+        type: integer
+      interest_rate:
+        description: |-
+          Annual interest rate (percent)
+          example: 12.5
+        type: number
+      monthly_payment:
+        description: |-
+          Monthly annuity payment
+          example: 8885.44
+        type: number
+      principal:
+        description: |-
+          Original credit amount
+          example: 100000.00
+        type: number
+      term_months:
+        description: |-
+          Credit term in months
+          example: 12
+        type: integer
+      user_id:
+        description: |-
+          ID of the user who owns the credit
+          example: 1
+        type: integer
+    type: object
+  model.MonthlyStats:
+    properties:
+      credit_due_total:
+        description: |-
+          Total unpaid credit obligations
+          example: 50000.00
+        type: number
+      monthly_expense:
+        description: |-
+          Total expenses for the current month
+          example: 80000.00
+        type: number
+      monthly_income:
+        description: |-
+          Total income for the current month
+          example: 120000.00
+        type: number
+    type: object
+  model.PaymentSchedule:
+    properties:
+      amount:
+        description: |-
+          Payment amount for the month
+          example: 8885.44
+        type: number
+      due_date:
+        description: |-
+          Due date for the payment
+          example: 2025-06-01T00:00:00Z
+        type: string
+      paid:
+        description: |-
+          Whether the payment was successfully made
+          example: false
+        type: boolean
+      penalty_applied:
+        description: |-
+          Whether a penalty was applied due to late or failed payment
+          example: true
+        type: boolean
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: REST API for banking service
+  title: Banking API
+  version: "1.0"
+paths:
+  /api/accounts:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new bank account for the authenticated user
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/model.Account'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Create a new bank account
+      tags:
+      - Accounts
+  /api/accounts/{id}:
+    get:
+      description: Returns information about a bank account if it belongs to the user
+      parameters:
+      - description: Account ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Account'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "403":
+          description: Forbidden
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Get account details
+      tags:
+      - Accounts
+  /api/analytics:
+    get:
+      description: Returns total income and expenses for the current month
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.MonthlyStats'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Get monthly income and expenses
+      tags:
+      - Analytics
+  /api/analytics/predict:
+    get:
+      description: Returns projected account balance based on upcoming credit payments
+      parameters:
+      - description: Prediction period in days (max 365)
+        in: query
+        name: days
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.predictedBalanceResponse'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Predict account balance
+      tags:
+      - Analytics
+  /api/cards:
+    get:
+      description: Returns decrypted virtual card data (number, expiry) for the authenticated
+        user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.CardRaw'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Get user's virtual cards
+      tags:
+      - Cards
+    post:
+      consumes:
+      - application/json
+      description: Generates a new encrypted virtual card for the specified account
+      parameters:
+      - description: Target account ID
+        in: body
+        name: createCardRequest
+        required: true
+        schema:
+          $ref: '#/definitions/handler.createCardRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/model.CardPlain'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Issue a new virtual card
+      tags:
+      - Cards
+  /api/credits:
+    post:
+      consumes:
+      - application/json
+      description: Issues a new credit for the user with annuity payment schedule
+      parameters:
+      - description: Credit details
+        in: body
+        name: createCreditRequest
+        required: true
+        schema:
+          $ref: '#/definitions/handler.createCreditRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/model.Credit'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Create a new credit
+      tags:
+      - Credits
+  /api/credits/{id}/schedule:
+    get:
+      description: Returns a full monthly payment schedule for a specific credit
+      parameters:
+      - description: Credit ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.PaymentSchedule'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Get credit payment schedule
+      tags:
+      - Credits
+  /api/deposit:
+    post:
+      consumes:
+      - application/json
+      description: Adds funds to the specified user-owned account
+      parameters:
+      - description: Deposit details
+        in: body
+        name: depositRequest
+        required: true
+        schema:
+          $ref: '#/definitions/handler.depositRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Account'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Deposit money to account
+      tags:
+      - Transactions
+  /api/keyrate:
+    get:
+      description: Get current key rate from Central Bank
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.KeyRateResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Get current key rate
+      tags:
+      - CBR
+  /api/transfer:
+    post:
+      consumes:
+      - application/json
+      description: Transfers money from one user-owned account to another account
+      parameters:
+      - description: Transfer details
+        in: body
+        name: transferRequest
+        required: true
+        schema:
+          $ref: '#/definitions/handler.transferRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "403":
+          description: Forbidden
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Transfer funds between accounts
+      tags:
+      - Transactions
+  /api/withdraw:
+    post:
+      consumes:
+      - application/json
+      description: Deducts funds from the specified user-owned account
+      parameters:
+      - description: Withdraw details
+        in: body
+        name: withdrawRequest
+        required: true
+        schema:
+          $ref: '#/definitions/handler.depositRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Account'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Withdraw money from account
+      tags:
+      - Transactions
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Validates credentials and returns access token if successful
+      parameters:
+      - description: Login data
+        in: body
+        name: loginRequest
+        required: true
+        schema:
+          $ref: '#/definitions/handler.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.LoginResponse'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Authenticate user and return JWT token
+      tags:
+      - Auth
+  /register:
+    post:
+      consumes:
+      - application/json
+      description: Registers a user with unique email and username, returns user info
+      parameters:
+      - description: Registration data
+        in: body
+        name: registerRequest
+        required: true
+        schema:
+          $ref: '#/definitions/handler.registerRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/handler.RegisterResponse'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Register a new user
+      tags:
+      - Auth
+schemes:
+- http
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

@@ -7,6 +7,9 @@ import (
 
 	"github.com/joho/godotenv"
 
+	httpSwagger "github.com/swaggo/http-swagger"
+
+	_ "banking-api/docs"
 	"banking-api/internal/app"
 	"banking-api/internal/db"
 	"banking-api/internal/repository"
@@ -14,6 +17,15 @@ import (
 	"banking-api/pkg/logger"
 )
 
+// @title Banking API
+// @version 1.0
+// @description REST API for banking service
+// @host localhost:8080
+// @BasePath /
+// @schemes http
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
 func main() {
 	// load variables from .env
 	logger.Init()
@@ -34,6 +46,7 @@ func main() {
 
 	// run application
 	router := app.SetupRouter()
+	router.PathPrefix("/swagger/").Handler(httpSwagger.WrapHandler)
 
 	port := os.Getenv("PORT")
 	if port == "" {
